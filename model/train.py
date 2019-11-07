@@ -5,7 +5,7 @@ import csv, sys
 import matplotlib.pyplot as plt
 from tensorboard_logger import configure, log_value, log_histogram, log_images,  Logger
 from PIL import Image
-import cv2
+import cv2, os
 
 dates = []
 prices = []
