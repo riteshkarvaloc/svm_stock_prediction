@@ -40,7 +40,7 @@ configure(MODEL_DIR + "run-3", flush_secs=5)
 if __name__ == "__main__":
 
     print ("MODEL_DIR:{}, DATA_DIR:{}".format(MODEL_DIR,DATA_DIR))
-    get_data(DATA_DIR)
+    get_data(DATA_DIR +'/goog.csv')
 
     dates = np.reshape(dates,(len(dates), 1))
 
