@@ -21,7 +21,7 @@ try:
     from tensorflow.core.framework import summary_pb2
 except ImportError:
     from .tf_protobuf import summary_pb2, event_pb2
-from .crc32c import crc32c
+from crc32c import crc32c
 
 
 __all__ = ['Logger', 'configure', 'unconfigure', 'log_value', 'log_histogram', 'log_images']
@@ -35,12 +35,12 @@ class Logger(object):
     def __init__(self, logdir, flush_secs=2, is_dummy=False, dummy_time=None):
         self._name_to_tf_name = {}
         self._tf_names = set()
-        self.is_dumminstall jupyterlab
-        self.logdir install jupyterlab
-        self.flush_sinstall jupyterlabO
-        self._writerinstall jupyterlab
-        self._dummy_install jupyterlab
-        if is_dummy:install jupyterlab
+        self.is_dummy = is_dummy
+        self.logdir = logdir
+        self.flush_secs = flush_secs  # TODO
+        self._writer = None
+        self._dummy_time = dummy_time
+        if is_dummy:
             self.dummy_log = defaultdict(list)
         else:
             if not os.path.exists(self.logdir):
