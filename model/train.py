@@ -21,6 +21,8 @@ def eval_metrics(actual, pred):
     r2 = r2_score(actual, pred)
     return rmse, mae, r2
 
+DATA_DIR = os.getenv('DKUBE_INPUT_DATASETS', None)
+MODEL_DIR = os.getenv('DKUBE_JOB_OUTPUT_S3', None)
 
 def get_data(filename):
 	with open(filename, 'r') as csvfile:
@@ -32,12 +34,13 @@ def get_data(filename):
 	return
 
 
-configure("runs/run-3", flush_secs=5)
+configure(MODEL_DIR + "run-3", flush_secs=5)
 
 
 if __name__ == "__main__":
 
-    get_data('goog.csv')
+    print ("MODEL_DIR:{}, DATA_DIR:{}".format(MODEL_DIR,DATA_DIR))
+    get_data(DATA_DIR)
 
     dates = np.reshape(dates,(len(dates), 1))
 
