@@ -64,5 +64,5 @@ if __name__ == "__main__":
     log_value('R2', r2)
 
     img = cv2.imread('svm.png')
-
+    log_histogram('Stock Prices', prices, step=1)
     log_images('Model-3',[img])
