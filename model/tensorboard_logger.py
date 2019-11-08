@@ -53,7 +53,8 @@ class Logger(object):
             filename = os.path.join(
                 self.logdir, 'events.out.tfevents.{}.{}'.format(
                     int(self._time()), hostname))
-            self._writer = open(filename, 'wb')
+            #self._writer = open(filename, 'wb')
+            self._writer = gfile.GFile(filename, 'wb')
             self._write_event(event_pb2.Event(
                 wall_time=self._time(), step=0, file_version='brain.Event:2'))
 
