@@ -22,7 +22,7 @@ try:
 except ImportError:
     from .tf_protobuf import summary_pb2, event_pb2
 from crc32c import crc32c
-from tensorflow import gfile
+from tensorflow.io import gfile
 
 
 __all__ = ['Logger', 'configure', 'unconfigure', 'log_value', 'log_histogram', 'log_images']
