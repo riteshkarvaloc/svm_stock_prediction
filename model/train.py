@@ -34,7 +34,7 @@ def get_data(filename):
 	return
 
 
-configure(MODEL_DIR + "run-3", flush_secs=5)
+configure(MODEL_DIR + "/run-3", flush_secs=5)
 
 
 if __name__ == "__main__":
