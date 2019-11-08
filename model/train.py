@@ -10,7 +10,7 @@ import cv2, os
 dates = []
 prices = []
 name = str(sys.argv[1]) if len(sys.argv) > 1 else 'SVM for stock Preiction'
-kernel = str(sys.argv[2]) if len(sys.argv) > 2 else 'linear'
+kernel = str(sys.argv[2]) if len(sys.argv) > 2 else 'rbf'
 C = float(sys.argv[3]) if len(sys.argv) > 3 else 1e3
 gamma = float(sys.argv[4]) if len(sys.argv) > 4 else 0.1
 degree= int(sys.argv[5]) if len(sys.argv) > 5 else 2
@@ -65,4 +65,4 @@ if __name__ == "__main__":
 
     img = cv2.imread('svm.png')
     log_histogram('Stock Prices', prices, step=1)
-    log_images('Model-3',[img])
+    log_images('Stock Prediction Model',[img])
