@@ -5,7 +5,8 @@ import csv, sys
 import matplotlib.pyplot as plt
 from tensorboard_logger import configure, log_value, log_histogram, log_images,  Logger
 from PIL import Image
-import cv2, os
+import cv2, os, json
+import joblib
 
 dates = []
 prices = []
@@ -21,8 +22,9 @@ def eval_metrics(actual, pred):
     r2 = r2_score(actual, pred)
     return rmse, mae, r2
 
-DATA_DIR = os.getenv('DKUBE_INPUT_DATASETS', None)
-MODEL_DIR = os.getenv('DKUBE_JOB_OUTPUT_S3', None)
+DATA_DIR = '/opt/dkube/input'
+MODEL_DIR = '/opt/dkube/model'
+metric_path = MODEL_DIR + '/metrics/'
 
 def get_data(filename):
 	with open(filename, 'r') as csvfile:
@@ -33,9 +35,10 @@ def get_data(filename):
 			prices.append(float(row[1]))
 	return
 
+if not os.path.exists(MODEL_DIR + "/logs/SVMrun"):
+    os.makedirs(MODEL_DIR + "/logs/SVMrun")
 
-configure(MODEL_DIR + "/SVMrun", flush_secs=5)
-
+configure(MODEL_DIR + "/logs/SVMrun", flush_secs=5)
 
 if __name__ == "__main__":
 
@@ -51,6 +54,28 @@ if __name__ == "__main__":
     predictions = svm.predict(dates)
 
     (rmse, mae, r2) = eval_metrics(prices, predictions)
+    
+    metrics = []
+    metric_names = ['rmse', 'mae', 'r2']
+    train_metrics = [rmse, mae, r2]
+    if not os.path.exists(metric_path):
+        os.makedirs(metric_path)
+    for i in range(3):
+        temp = {}
+        temp['class'] = 'scalar'
+        temp['name'] = metric_names[i]
+        temp['value'] = str(train_metrics[i])
+        metrics.append(temp)
+    metrics = {'metrics':metrics}
+    with open(metric_path + 'metrics.json', 'w') as outfile:
+        json.dump(metrics, outfile, indent=4)
+        
+    if not os.path.exists(MODEL_DIR + "/model"):
+        os.makedirs(MODEL_DIR + "/model")
+    
+    filename = MODEL_DIR + '/model/stock_prediction.joblib'
+    joblib.dump(svm, filename)
+
     plt.scatter(dates, prices, color= 'black', label= 'Data')
     plt.plot(dates,predictions, color= 'red', label= 'SVM model')
     plt.xlabel('Date')
